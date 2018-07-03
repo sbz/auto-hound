@@ -12,6 +12,7 @@ RUN cd /
 RUN go get github.com/etsy/hound/cmds/houndd
 RUN go get github.com/etsy/hound/cmds/hound
 RUN go get github.com/google/go-github/github
+RUN go get golang.org/x/oauth2
 
 EXPOSE 6080
 
