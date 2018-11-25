@@ -42,6 +42,18 @@ func lookupEnv(key string, defaultValue string) string {
 	return ret
 }
 
+func topicMatches(repoTopics []string, wantedTopics []string) bool {
+	for _, topic := range repoTopics {
+		for _, wanted := range wantedTopics {
+			if topic == wanted {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 func main() {
 	var orgName string
 	var orgType string
