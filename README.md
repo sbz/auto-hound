@@ -12,17 +12,24 @@ You can pass the following environment variables to the script:
 # Build
 
 ```
-docker build -t sbz/auto-hound .
+docker build --tag sbz/auto-hound .
 ```
 
 # Run
 
 ```
-docker run -d -p 6080:6080 sbz/auto-hound
+docker run --name auto-hound --rm --detach --publish 6080:6080 sbz/auto-hound
 ```
 
 # Run with environment and random ports
 
 ```
-docker run -d -e ORG_TYPE=public -e ORG_NAME=freebsd -P sbz/auto-hound
+docker run --name auto-hound --rm --detach -e ORG_TYPE=public -e ORG_NAME=freebsd -P sbz/auto-hound
+```
+
+To figure out the port bound on the host, you can use `docker port auto-hound` or the
+following command [docker inspect](https://docs.docker.com/engine/reference/commandline/inspect):
+
+```
+docker inspect --format '{{ (index (index .NetworkSettings.Ports "6080/tcp") 0).HostPort }}' auto-hound
 ```
