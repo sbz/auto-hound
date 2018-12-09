@@ -11,8 +11,10 @@ import (
 )
 
 const (
-	defaultOrgName = "Nitro"
-	defaultOrgType = "public"
+	defaultOrgName   = "Nitro"
+	defaultOrgType   = "public"
+	defaultOrgTopics = "golang"
+	orgToken         = ""
 )
 
 func checkError(err interface{}) {
@@ -55,17 +57,12 @@ func topicMatches(repoTopics []string, wantedTopics []string) bool {
 }
 
 func main() {
-	var orgName string
-	var orgType string
+	var orgName, orgType, orgTopics string
 	var client *github.Client
 
 	ctx := context.Background()
 	if !isEmpty(orgToken) {
-		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: orgToken},
-		)
-		tc := oauth2.NewClient(ctx, ts)
-
+		tc := oauth2.NewClient(ctx, oauth2.StaticTokenSource(&oauth2.Token{AccessToken: orgToken}))
 		client = github.NewClient(tc)
 	} else {
 		client = github.NewClient(nil)
@@ -73,6 +70,7 @@ func main() {
 
 	orgName = lookupEnv("ORG_NAME", defaultOrgName)
 	orgType = lookupEnv("ORG_TYPE", defaultOrgType)
+	orgTopics = lookupEnv("ORG_TOPIC", defaultOrgTopics)
 
 	opts := &github.RepositoryListByOrgOptions{Type: orgType, ListOptions: github.ListOptions{PerPage: 50}}
 	var allRepos []*github.Repository
@@ -96,16 +94,16 @@ func main() {
 		if *repo.Fork || *repo.Archived {
 			continue
 		}
-		println(*repo.Name)
+		if !topicMatches(repo.Topics, strings.Split(orgTopics, ",")) {
+			continue
+		}
 		container := map[string]string{"url": *repo.CloneURL}
 		configRepos[*repo.Name] = container
 	}
-	//os.Exit(1)
 	config["repos"] = configRepos
 
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", strings.Repeat(" ", 4))
 	encoder.Encode(config)
 
-	os.Exit(0)
 }
