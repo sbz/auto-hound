@@ -8,6 +8,7 @@ You can pass the following environment variables to the script:
 
 * `ORG_NAME`: github organization name
 * `ORG_TYPE`: github organization privacy type
+* `ORG_TOPIC`: github organization topics (repos topics filter)
 
 # Build
 
