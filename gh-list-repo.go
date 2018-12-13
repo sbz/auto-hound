@@ -13,7 +13,7 @@ import (
 const (
 	defaultOrgName   = "Nitro"
 	defaultOrgType   = "public"
-	defaultOrgTopics = "golang"
+	defaultOrgTopics = ""
 	orgToken         = ""
 )
 
@@ -94,7 +94,7 @@ func main() {
 		if *repo.Fork || *repo.Archived {
 			continue
 		}
-		if !topicMatches(repo.Topics, strings.Split(orgTopics, ",")) {
+		if !isEmpty(orgTopics) && !topicMatches(repo.Topics, strings.Split(orgTopics, ",")) {
 			continue
 		}
 		container := map[string]string{"url": *repo.CloneURL}
