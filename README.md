@@ -12,6 +12,15 @@ You can pass the following environment variables to the script:
 
 # Build
 
+## Binary
+
+```
+dep ensure
+GOOS=linux go build .
+```
+
+## Docker image
+
 ```
 docker build --tag sbz/auto-hound .
 ```
