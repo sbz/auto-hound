@@ -2,7 +2,7 @@
 
 Auto-configure etsy's [hound](https://github.com/etsy/hound) project to search into multiple repositories.
 
-This contains the script [gh-list-repo](/gh-list-repo.go) which use the [go-github](https://github.com/google/go-github) project to query GitHub.
+This contains the script [auto-hound](/auto-hound.go) which use the [go-github](https://github.com/google/go-github) project to query GitHub.
 
 You can pass the following environment variables to the script:
 
